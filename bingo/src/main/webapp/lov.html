@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head >
+    <title>LOV</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/bingo.datetimepicker.css"/>
+    <link rel="stylesheet" href="./css/bingo.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+        <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <form name="form" action="#">
+      <input name="lov_value" class="text" value="1116" type="text" >
+        <button type="button" class="btn btn-default" style="color: rgb(3,104,154)" onclick="window.opener.lov.closeLovWindow(document.forms[0].lov_value.value);">
+        <span class="glyphicon glyphicon-ok"></span>OK
+        </button>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./js/jquery.js"></script>
+    <script src="./js/jquery.datetimepicker.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/bingo.lov.js"></script>
+    <script type="text/javascript">
+    var f = document.forms[0];
+    </script>
+    </form>
+  </body> 
+</html>
