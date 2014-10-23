@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组织机构树</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/bingo.css">
+    <link rel="stylesheet" href="./css/jquery.zTreeStyle.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+        <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+  <body>
+    <ul id="tree" class="ztree" style="overflow:auto;"></ul>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./js/jquery.js"></script>
+    <script src="./js/jquery.ztree.all-3.5.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" >
+		  var zTreeObj,
+		  setting = {
+		    view: {
+		      selectedMulti: false
+		    },
+		  data: {
+		    simpleData: {
+		    	enable: true,
+		    	idKey: "id",
+			   pIdKey: "pId",
+				rootPId: 0,
+				    }
+				  }
+		  },
+		  zTreeNodes = [
+					{"id":"1116-XANH", "pId":"1116", "name":"中核辽宁核电有限公司"},
+					{"id":"1116-XCNH", "pId":"1116", "name":"徐大堡核电工程项目部"},
+					{"id":"1116-XCNI", "pId":"1116", "name":"中核二二辽宁核电土石方工程项目经理部"},
+					{"id":"1116-XGEX", "pId":"1116", "name":"中核二二辽宁徐大堡核电工程项目经理部"},
+					{"id":"1116-XGNX", "pId":"1116", "name":"中国核工业二三建设有限公司徐大堡项目部"},
+					{"id":"1116-XGJX", "pId":"1116", "name":"核工业井巷建设公司辽宁徐大堡核电工程项目部"},
+					{"id":"1116-XGAA", "pId":"1116", "name":"核工业南京建设集团有限公司徐大堡核电工程项目部"},
+					{"id":"1116-XGAR", "pId":"1116", "name":"中交一航局第五工程有限公司徐大堡核电项目经理部"},
+					{"id":"1116-XGAK", "pId":"1116", "name":"青岛海防工程局徐大堡项目部"},
+					{"id":"1116-XGYQ", "pId":"1116", "name":"中国核工业中原建设有限公司徐大堡核电土建项目部"},
+					{"id":"1116-XPSD", "pId":"1116", "name":"BSEM辽宁徐大堡核电项目监理部"},
+					{"id":"1116-XCNH-ZJLB", "pId":"1116-XCNH", "name":"总经理部"},
+					{"id":"1116-XCNH-ZBB", "pId":"1116-XCNH", "name":"质量保证部"},
+					{"id":"1116-XCNH-XWB", "pId":"1116-XCNH", "name":"信息文档部"},
+					{"id":"1116-XCNH-ZKB", "pId":"1116-XCNH", "name":"监理公司徐大堡项目部"},
+					{"id":"1116-XCNH-AGB", "pId":"1116-XCNH", "name":"安全管理部"},
+					{"id":"1116-XCNH-CGB", "pId":"1116-XCNH", "name":"采购管理部"},
+					{"id":"1116-XCNH-SGB", "pId":"1116-XCNH", "name":"施工管理部"},
+					{"id":"1116-XCNH-JXB", "pId":"1116-XCNH", "name":"技术协调部"},
+					{"id":"1116-XCNH-SJB", "pId":"1116-XCNH", "name":"设计管理部"},
+					{"id":"1116-XCNH-KZB", "pId":"1116-XCNH", "name":"项目控制部"},
+					{"id":"1116-XCNH-HTB", "pId":"1116-XCNH", "name":"合同管理部"},
+					{"id":"1116-XCNH-XZB", "pId":"1116-XCNH", "name":"行政部"},
+					{"id":"1116-XCNH-WZB", "pId":"1116-XCNH", "name":"物资管理部"},
+					{"id":"1116-XCNH-TSB", "pId":"1116-XCNH", "name":"项目调试部"},
+					{"id":"1116-XCNI-ZHB", "pId":"1116-XCNI", "name":"综合部"},
+					{"id":"1116-XGNX-JSB", "pId":"1116-XGNX", "name":"技术部"},
+					{"id":"1116-XGJX-JSB", "pId":"1116-XGJX", "name":"技术部"},
+					{"id":"1116-XGAA-ZHB", "pId":"1116-XGAA", "name":"综合部"},
+					{"id":"1116-XGAR-BGS", "pId":"1116-XGAR", "name":"办公室"},
+					{"id":"1116-XGAK-JSB", "pId":"1116-XGAK", "name":"技术部"},
+					{"id":"1116-XGYQ-BGS", "pId":"1116-XGYQ", "name":"办公室"},
+					{"id":"1116-XPSD-ZHB", "pId":"1116-XPSD", "name":"综合管理部"},
+					{"id":"1116-XANH-XWB", "pId":"1116-XANH", "name":"信息文档部"},
+					{"id":"1116-XCNH-SGB-ZHK", "pId":"1116-XCNH-SGB", "name":"施工管理部综合组"},
+					{"id":"1116-XCNH-SGB-ZCK", "pId":"1116-XCNH-SGB", "name":"施工管理部支持科"},
+					{"id":"1116-8010", "pId":"1116", "name":"中国核电工程有限公司福清项目部"},
+					{"id":"1116-8020", "pId":"1116", "name":"中国核电工程有限公司方家山项目部"},
+					{"id":"1116-8030", "pId":"1116", "name":"中国核电工程有限公司昌江项目部"},
+					{"id":"1116-8040", "pId":"1116", "name":"中国核电工程有限公司桃花江项目部"},
+					{"id":"1116-8050", "pId":"1116", "name":"中国核电工程有限公司田湾项目部"},
+					{"id":"1116-8070", "pId":"1116", "name":"中国核电工程有限公司821项目部"},
+					{"id":"1116-XCNB-1140", "pId":"1116-XCNB", "name":"总部信息文档部"},
+					{"id":"1116-XCNH-ZKB-ZHK", "pId":"1116-XCNH-ZKB", "name":"综合部"},
+					{"id":"1116-XCNB-1150", "pId":"1116-XCNB", "name":"总部招标中心"},
+					{"id":"1116-XCNH-ZKB-ZAK", "pId":"1116-XCNH-ZKB", "name":"质量安全部"},
+					{"id":"1116-XCNH-ZKB-TJK", "pId":"1116-XCNH-ZKB", "name":"土建部"},
+					{"id":"1116-XCNH-ZKB-DYK", "pId":"1116-XCNH-ZKB", "name":"电仪安装部"},
+					{"id":"1116-XCNH-ZKB-SGK", "pId":"1116-XCNH-ZKB", "name":"设备管道安装部"},
+					{"id":"1116-XDAB", "pId":"1116", "name":"国核电力规划设计研究院"},
+					{"id":"1116-XPAT", "pId":"1116", "name":"杭州水处理技术研究开发中心有限公司"},
+					{"id":"1116-XPBC", "pId":"1116", "name":"重庆川仪自动化股份有限公司"},
+					{"id":"1116-XPBP", "pId":"1116", "name":"浙江宏伟供应链股份有限公司"},
+					{"id":"1116-XPBQ", "pId":"1116", "name":"大连船舶重工集团有限公司"},
+					{"id":"1116-XCNH-SGB-HDK", "pId":"1116-XCNH-SGB", "name":"施工管理部核岛科"},
+					{"id":"1116-XMCB", "pId":"1116", "name":"北京水保公司徐大堡核电站监理、监测项目部"},
+					{"id":"1116-XCNH-MYH", "pId":"1116-XCNH", "name":"孟英辉现场副总经理"},
+					{"id":"1116-XCNH-ZJX", "pId":"1116-XCNH", "name":"赵加雪项目总经理"},
+					{"id":"1116-XCNH-TLM", "pId":"1116-XCNH", "name":"田利民项目副总经理"},
+					{"id":"1116-XPAE", "pId":"1116", "name":"上海森松压力容器有限公司"},
+					{"id":"1116-XGNH", "pId":"1116", "name":"中核混凝土股份有限公司徐大堡核电项目部"},
+					{"id":"1116-XPNX", "pId":"1116", "name":"核工业南京工程勘察院"},
+					{"id":"1116-XCNH-XPMB", "pId":"1116-XCNH", "name":"总部采购部"},
+					{"id":"1116-XCNH-XTMB", "pId":"1116-XCNH", "name":"总部调试部"},
+					{"id":"1116-XCNB-SJZ", "pId":"1116-XCNB", "name":"张利设计经理"},
+					{"id":"1116-XEAK", "pId":"1116", "name":"山东核电设备制造有限公司徐大堡现场项目部"},
+					{"id":"1116-XGSS", "pId":"1116", "name":"沈阳北矿集团徐大堡碎石厂项目部"},
+					{"id":"1116-XMGN", "pId":"1116", "name":"解放军理工大学工程兵工程学院"},
+					{"id":"1116-XPYS", "pId":"1116", "name":"河北中核岩土工程有限责任公司"},
+					{"id":"1116-XSBX", "pId":"1116", "name":"西安核设备有限公司"},
+					{"id":"1116-XPAB", "pId":"1116", "name":"东方电气股份有限公司"},
+					{"id":"1116-XCNB-4000", "pId":"1116-XCNB", "name":"河北分公司"},
+					{"id":"1116-XPBF", "pId":"1116", "name":"中电电气（江苏）股份有限公司"},
+					{"id":"1116-XPBT", "pId":"1116", "name":"浙江三方控制阀股份有限公司"},
+					{"id":"1116-XMDH", "pId":"1116", "name":"葫芦岛菊花女餐饮有限公司"},
+					{"id":"1116-XMEH", "pId":"1116", "name":"兴城宇都物业管理有限公司"},
+					{"id":"1116-XGNX-QAD", "pId":"1116-XGNX", "name":"质保部"},
+					{"id":"1116-XGNX-QCD", "pId":"1116-XGNX", "name":"质检部"},
+					{"id":"1116-XGNX-PMD", "pId":"1116-XGNX", "name":"工程部"},
+					{"id":"1116-XGNX-GMD", "pId":"1116-XGNX", "name":"物资部"},
+					{"id":"1116-XGNX-PLT", "pId":"1116-XGNX", "name":"管道队"},
+					{"id":"1116-XGNX-GET", "pId":"1116-XGNX", "name":"电气队"},
+					{"id":"1116-XGNX-MET", "pId":"1116-XGNX", "name":"机械队"},
+					{"id":"1116-XGNX-PET", "pId":"1116-XGNX", "name":"主设备队"},
+					{"id":"1116-XGEX-PMD", "pId":"1116-XGEX", "name":"工程部"},
+					{"id":"1116-XGEX-ERT", "pId":"1116-XGEX", "name":"土石方队"},
+					{"id":"1116-XGEX-BOP", "pId":"1116-XGEX", "name":"BOP队"},
+					{"id":"1116-XGEX-NIT", "pId":"1116-XGEX", "name":"核岛队"},
+					{"id":"1116-XGEX-ZHT", "pId":"1116-XGEX", "name":"综合队"},
+					{"id":"1116-XCNB", "pId":"1116", "name":"中国核电工程有限公司（北京）"},
+					{"id":"1116-XCNB-0001", "pId":"1116-XCNB", "name":"总部公司领导"},
+					{"id":"1116-XCNB-1010", "pId":"1116-XCNB", "name":"总部总经理办公室"},
+					{"id":"1116-XCNB-1020", "pId":"1116-XCNB", "name":"总部规划发展部"},
+					{"id":"1116-XCNB-1030", "pId":"1116-XCNB", "name":"总部人力资源部"},
+					{"id":"1116-XCNB-1040", "pId":"1116-XCNB", "name":"总部财会部"},
+					{"id":"1116-XCNB-1050", "pId":"1116-XCNB", "name":"总部科技部"},
+					{"id":"1116-XCNB-1060", "pId":"1116-XCNB", "name":"总部保密部"},
+					{"id":"1116-XCNB-1080", "pId":"1116-XCNB", "name":"总部工程管理部"},
+					{"id":"1116-XCNB-1090", "pId":"1116-XCNB", "name":"总部质量保证部"},
+					{"id":"1116-XCNB-1110", "pId":"1116-XCNB", "name":"总部安全管理部"},
+					{"id":"1116-XCNB-1120", "pId":"1116-XCNB", "name":"总部监察设计部"},
+					{"id":"1116-XGWB", "pId":"1116", "name":"中国核工业第五建设有限公司"},
+					{"id":"1116-XSCX", "pId":"1116", "name":"西安核设备有限公司"},
+					{"id":"1116-XSCC", "pId":"1116", "name":"东方电气股份有限公司"},
+					{"id":"1116-XPAN", "pId":"1116", "name":"浙江宏伟供应链股份有限公司"},
+					{"id":"1116-FCNJ", "pId":"1116", "name":"CNPE方家山核电工程项目部"},
+					{"id":"1116- XENC", "pId":"1116", "name":"中国核动力研究设计院核电设备集成采购部"},
+					{"id":"1116-XBSM", "pId":"1116", "name":"中核集团三门核电有限公司"},
+					{"id":"1116-XCNB-1130", "pId":"1116-XCNB", "name":"总部党群工作部"},
+					{"id":"1116", "pId":"", "name":"徐大堡项目一期（1、2号机组）" ,"open":true},
+					{"id":"1116-XCNB-7100", "pId":"1116-XCNB", "name":"总部调试部"},
+					{"id":"1116-XCNB-2010", "pId":"1116-XCNB", "name":"总部设计院科研设计管理部"},
+					{"id":"1116-XCNB-6100", "pId":"1116-XCNB", "name":"总部采购部"},
+					{"id":"1116-XCNB-1070", "pId":"1116-XCNB", "name":"总部经营合同部"},
+					{"id":"1116-XPAQ", "pId":"1116", "name":"施耐德电气（中国）有限公司"},
+					{"id":"1116-XPAK", "pId":"1116", "name":"山东核电设备制造有限公司"},
+					{"id":"1116-XSBC", "pId":"1116", "name":"东方电气股份有限公司"},
+					{"id":"1116-XPAM", "pId":"1116", "name":"哈电集团（秦皇岛）重型装备有限公司"},
+					{"id":"1116-XPCC", "pId":"1116", "name":"东方电气股份有限公司"},
+					{"id":"1116-XGAX", "pId":"1116", "name":"辽宁建设安装集团有限公司兴城分公司核电项目部"},
+					{"id":"1116-XCNH-SGB-WZZ", "pId":"1116-XCNH-SGB", "name":"施工管理部物资组"},
+					{"id":"1116-XPAP", "pId":"1116", "name":"大连船舶重工集团有限公司"},
+					{"id":"1116-XCNH-XDMB", "pId":"1116-XCNH", "name":"总部科研设计管理部"},
+					{"id":"1116-XSAR", "pId":"1116", "name":"哈电集团（秦皇岛）重型装备有限公司"},
+					{"id":"1116-XMHF", "pId":"1116", "name":"葫芦岛兴核物业管理服务有限公司"},
+					{"id":"1116-XDNC", "pId":"1116", "name":"中国核动力研究设计院"},
+					{"id":"1116-XSAX", "pId":"1116", "name":"西安核设备有限公司"},
+					{"id":"1116-XXWB", "pId":"1116-XCNB", "name":"总部信息文档部"},
+					{"id":"1116-XPAD", "pId":"1116", "name":"西安核设备有限公司"},
+					{"id":"1116-XPBR", "pId":"1116", "name":"施耐德电气（中国）有限公司"},
+					{"id":"1116-XDFT", "pId":"1116", "name":"中交第四航务工程勘察设计院有限公司"},
+					{"id":"1116-XPSD-DYB", "pId":"1116-XPSD", "name":"电仪安装部"},
+					{"id":"1116-XCNH-SGB-CGDK", "pId":"1116-XCNH-SGB", "name":"施工管理部常规岛科"},
+					{"id":"1116-XCNH-SGB-BOPK", "pId":"1116-XCNH-SGB", "name":"施工管理部BOP科"},
+					{"id":"1116-XPSD-HGB", "pId":"1116-XPSD", "name":"海工部"},
+					{"id":"1116-XPSD-GDB", "pId":"1116-XPSD", "name":"设备管道质控部"},
+					{"id":"1116-XPSD-TJB", "pId":"1116-XPSD", "name":"土建部"},
+					{"id":"1116-XPSD-ZJB", "pId":"1116-XPSD", "name":"总监部"},
+					{"id":"1116-XGEX-JSB", "pId":"1116-XGEX", "name":"技术部"},
+					{"id":"1116-XGEX-GDB", "pId":"1116-XGEX", "name":"钢结构队"},
+					{"id":"1116-XGEX-JDB", "pId":"1116-XGEX", "name":"机运队"},
+					{"id":"1116-XGEX-CLB", "pId":"1116-XGEX", "name":"器材部"},
+					{"id":"1116-XGEX-QAB", "pId":"1116-XGEX", "name":"质保部"},
+					{"id":"1116-XGEX-XGB", "pId":"1116-XGEX", "name":"信息文档部"},
+					{"id":"1116-XGEX-QCB", "pId":"1116-XGEX", "name":"质控部"},
+					{"id":"1116-XGNX-JLB", "pId":"1116-XGNX", "name":"经理部"},
+					{"id":"1116-XGNX-HSE", "pId":"1116-XGNX", "name":"HSE部"},
+					{"id":"1116-XGNX-XWB", "pId":"1116-XGNX", "name":"信息文档部"},
+					{"id":"1116-XGEX-JLB", "pId":"1116-XGEX", "name":"经理部"},
+					{"id":"1116-XGEX-HSE", "pId":"1116-XGEX", "name":"HSE部"},
+					{"id":"1116-XPSD-AQB", "pId":"1116-XPSD", "name":"质量安全部"}
+		            ];
+		  $(document).ready(function(){
+		    zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+		  });
+    </script>
+  </body>
+</html>
