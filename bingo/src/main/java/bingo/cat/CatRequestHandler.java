@@ -54,10 +54,16 @@ public class CatRequestHandler extends HttpServlet {
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	   Map<String, String[]> parameterMap = request.getParameterMap();
+	   String classQuid = request.getParameter("class_quid");
+      CatObject classObj = CatObject.register.get(classQuid);
+	   CatFile catFile = classObj.catFile;
+	   ArrayList<CatFileLine> fileLines = catFile.getFileLines();
+	   
+	   
 	   
 	   String[] quid = request.getParameterValues("quid");
 	   
-	   String prefix = null;
+	   String attrQuid = null;
 	   String paraValue = null;
 	   char[] flag = null;
 	   
@@ -71,13 +77,17 @@ public class CatRequestHandler extends HttpServlet {
       boolean insertable = true;
       boolean lov = true;
       FieldUpdatable updatable = FieldUpdatable.NOTALLOWED;
-      //         KMI-L
+      
+      ArrayList<CalAttr> attrList = null;
+      CatObject attrObj = null;
+      CatObjectList catObjectList  = null;
 	   for (int i = 0; i < quid.length; i++) {
+	      attrList = new ArrayList<CalAttr>();
 	      flag = new char[5];
-         prefix = quid[i];  
+         attrQuid = quid[i];  
          
-         //
-         paraValue = request.getParameter(prefix + "_bingo_attr_primary_key");
+         //FieldFlag
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_primary_key");
          if(paraValue == null){
             flag[0] = 'A';
          }else{
@@ -85,7 +95,7 @@ public class CatRequestHandler extends HttpServlet {
          }
          
          //
-         paraValue = request.getParameter(prefix + "_bingo_attr_mandatory");
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_mandatory");
          if(paraValue == null){
             flag[1] = '-';
          }else{
@@ -93,7 +103,7 @@ public class CatRequestHandler extends HttpServlet {
          }
          
          //
-         paraValue = request.getParameter(prefix + "_bingo_attr_insertable");
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_insertable");
          if(paraValue == null){
             flag[2] = '-';
          }else{
@@ -101,7 +111,7 @@ public class CatRequestHandler extends HttpServlet {
          }
          
          //
-         paraValue = request.getParameter(prefix + "_bingo_attr_lov");
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_lov");
          if(paraValue == null){
             flag[4] = '-';
          }else{
@@ -109,7 +119,7 @@ public class CatRequestHandler extends HttpServlet {
          }
          
          //
-         paraValue = request.getParameter(prefix + "_bingo_attr_updatable");
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_updatable");
          
          updatable = FieldUpdatable.valueOf(paraValue);
          if(updatable.compareTo(FieldUpdatable.ALLOWED) == 0){
@@ -120,46 +130,91 @@ public class CatRequestHandler extends HttpServlet {
             flag[3] = '-';
          }
          String flagStr = CatObject.join(flag, "");
-//         StringUtils.jo
-         System.out.println(""+flagStr);
+//         System.out.println(""+flagStr);
+         attrList.add(new CalAttr("FieldFlags", flagStr));
          
-         
-         
-//         <%=classAttribute.getQuid()%>_bingo_attr_field_type
-//         _bingo_attr_length
-//         <%=classAttribute.getQuid()%>_bing_attr_format
-         
-         //
-         paraValue = request.getParameter(prefix + "_bingo_attr_field_type");
+         //FieldFormat
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_field_type");
          fieldType = FieldType.valueOf(paraValue);
-         
          if(fieldType.compareTo(FieldType.DATE) != 0){
-            paraValue = request.getParameter(prefix + "_bingo_attr_length");
-            length = new Integer(paraValue);
+            paraValue = request.getParameter(attrQuid + "_bingo_attr_length");
+            if(!StringUtils.isEmpty(paraValue)){
+               length = new Integer(paraValue);
+            }
          }
          
-         paraValue = request.getParameter(prefix + "_bing_attr_format");
+         paraValue = request.getParameter(attrQuid + "_bing_attr_format");
          fieldFormat = FieldFormat.valueOf(paraValue);
          
-         
-         if(fieldType.compareTo(FieldType.STRING) == 0){
-            dataType.append(fieldType.name()).append('(').append(length).append(')');
+         dataType = new StringBuilder();
+         if(fieldType.compareTo(FieldType.STRING) == 0 ){
+            dataType.append(fieldType.name());
+            if(length != 0){
+               dataType.append('(').append(length).append(')');
+            }
             if(fieldFormat.compareTo(FieldFormat.UNFORMATTED) != 0){
                dataType.append('/').append(fieldFormat.name());
             }
          }else if(fieldType.compareTo(FieldType.DATE) == 0){
+            dataType.append(fieldType.name());
             if(fieldFormat.compareTo(FieldFormat.UNFORMATTED) != 0){
                dataType.append('/').append(fieldFormat.name());
             }
          }else if(fieldType.compareTo(FieldType.NUMBER) == 0){
-            dataType.append(fieldType.name()).append('(').append(length).append(')');
+            dataType.append(fieldType.name());//.append('(').append(length).append(')');
+            if(length != 0){
+               dataType.append('(').append(length).append(')');
+            }
             if(fieldFormat.compareTo(FieldFormat.UNFORMATTED) != 0){
                dataType.append('/').append(fieldFormat.name());
             }
          }
+         attrList.add(new CalAttr("FieldFormat", dataType.toString()));
          
-         System.out.println(dataType);
+         attrObj = CatObject.register.get(attrQuid);
+         catObjectList = attrObj.getCatObjectList("attributes");
+         StringBuilder sb = new StringBuilder();
+         if(null == catObjectList) {
+            int objStartLineNo = attrObj.startRowCol[0];
+            CatFileLine objLine = catFile.getFileLine(objStartLineNo);
+            sb.append(objLine.getLine()).append(CatConstants.NEW_LINE);
+            String prefix = CatObject.getPrefix(objLine.getLine());//tabs ....
+            sb.append(prefix).append(CatConstants.FOUR_SPACE).append("attributes   (list Attribute_Set").append(CatConstants.NEW_LINE);
+            for (Iterator<CalAttr> iterator = attrList.iterator(); iterator.hasNext();) {
+               CalAttr calAttr = (CalAttr) iterator.next();
+               sb.append(calAttr.toCatObjectStr(prefix + CatConstants.CHAR_T));
+               if(iterator.hasNext()){
+                  sb.append(CatConstants.NEW_LINE);
+               }else{
+                  sb.append(")");
+               }
+            }
+            objLine.update(sb.toString());
+         }else{//catObjectList.size() >= 0
+            int objStartLineNo = attrObj.startRowCol[0];
+            CatFileLine objLine = catFile.getFileLine(objStartLineNo);
+            String prefix = CatObject.getPrefix(objLine.getLine());
+            
+            int startLineNo = catObjectList.getStartLineNo();
+            int endLineNo = catObjectList.getEndLineNo();
+            catFile.deleteLines(startLineNo, endLineNo);
+            CatFileLine tempLine = catFile.getFileLine(startLineNo);
+           
+            sb.append(tempLine.getLine()).append(CatConstants.NEW_LINE);//TODO list 为空的情况没有考虑
+//            sb.append(prefix).append(CatConstants.FOUR_SPACE).append("attributes   (list Attribute_Set").append(CatConstants.NEW_LINE);
+            for (Iterator<CalAttr> iterator = attrList.iterator(); iterator.hasNext();) {
+               CalAttr calAttr = iterator.next();
+               sb.append(calAttr.toCatObjectStr(prefix + CatConstants.CHAR_T));
+               if(iterator.hasNext()){
+                  sb.append(CatConstants.NEW_LINE);
+               }else{
+                  sb.append(")");
+               }
+            }
+            tempLine.update(sb.toString());
+         }
       }
+	   CatObject.outputCatFile(catFile, new File("C:\\Users\\lu\\tempCatFile.cat"));
 	}
 
 }

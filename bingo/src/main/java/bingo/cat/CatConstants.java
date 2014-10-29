@@ -12,9 +12,9 @@ public interface CatConstants {
    public static final char CHAR_SPACE = ' ';
    public static final char CHAR_T = '\t';
    public static final char CHAR_N = '\n';
-   public static final char NEW_LINE = '\n';
+   public static final String NEW_LINE = "\r\n";
    
-   public static final String CAT_TAB_SPACE = "    ";
+   public static final String FOUR_SPACE = "    ";
    
    public static final String CAT_OBJECT = "(object";
    public static final String CAT_LIST = "(list";

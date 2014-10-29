@@ -2,6 +2,14 @@ package bingo.cat;
 
 public class CatFileLine {
    
+   public String getFilePath() {
+      return filePath;
+   }
+
+   public void setFilePath(String filePath) {
+      this.filePath = filePath;
+   }
+   
    public CatFileLine(String line){
       this.line = line;
    }
@@ -21,6 +29,7 @@ public class CatFileLine {
    private String line;
    private LineStatus status = LineStatus.NOCHANGE;
    private String newLine;
+   private String filePath;
 
    
    //convenient method

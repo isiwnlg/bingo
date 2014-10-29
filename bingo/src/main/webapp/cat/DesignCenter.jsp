@@ -33,6 +33,7 @@
   </head>
   <body>
   <form action="../bingo.cat" method="post">
+    <input type="hidden" name="class_quid" value="<%=quid %>">
     <div class="container">
     
     <p class="navbar-text navbar-right">欢迎您 <a href="#" class="navbar-link">路庆伟</a></p>
@@ -306,6 +307,7 @@
             <tr>
               <td><a href="#"><%=(i+1) %></a></td> 
               <td class="multirow-sys-td">
+                  <input type="hidden" name="association_quid" value="<%=classAttribute.getQuid()%>"> 
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
                   <label class="dropdown">
                     <span class="dropdown-toggle glyphicon glyphicon-tasks" id="dropdownMenu1" data-toggle="dropdown"></span>

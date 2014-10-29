@@ -35,17 +35,11 @@ public class CalAttr implements CatConstants{
    public String toCatObjectStr(String prefix){
       StringBuilder sb = new StringBuilder();
       sb.append(prefix).append("(object Attribute").append(NEW_LINE);
-      sb.append(prefix).append(CAT_TAB_SPACE).append(StringUtils.rightPad("tool", 14)).append(CatObject.quoteStr(tool)).append(NEW_LINE);
-      sb.append(prefix).append(CAT_TAB_SPACE).append(StringUtils.rightPad("name", 14)).append(CatObject.quoteStr(name)).append(NEW_LINE);
-      sb.append(prefix).append(CAT_TAB_SPACE).append(StringUtils.rightPad("value", 14)).append(CatObject.quoteStr(value)).append(')');
-//      StringUtils.
-      
+      sb.append(prefix).append(FOUR_SPACE).append(StringUtils.rightPad("tool", 11)).append(CHAR_T).append(CatObject.quoteStr(tool)).append(NEW_LINE);
+      sb.append(prefix).append(FOUR_SPACE).append(StringUtils.rightPad("name", 11)).append(CHAR_T).append(CatObject.quoteStr(name)).append(NEW_LINE);
+      sb.append(prefix).append(FOUR_SPACE).append(StringUtils.rightPad("value", 11)).append(CHAR_T).append(CatObject.quoteStr(value)).append(')');
       
       return sb.toString();
-//      (object Attribute
-//            tool          "Foundation1"
-//            name          "FieldFlags"
-//            value         "A-IUL")
    }
    
    
@@ -53,7 +47,6 @@ public class CalAttr implements CatConstants{
       return toCatObjectStr("");
    }
    public static void main(String[] args) {
-//      System.out.println(new CalAttr("FieldFlags", "A-IUL"));
       
       String prefix = "            ";
       StringBuilder sb = new StringBuilder();
