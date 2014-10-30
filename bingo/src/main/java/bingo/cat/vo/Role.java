@@ -7,7 +7,7 @@ import bingo.cat.ObjectType;
 
 public class Role extends CatVoObject {
    private String label;//=Name ?冲突测试
-   private String Containment;//程序员1修改
+   private String Containment;
    private String supplier;
    private String quidu;
    private boolean navigatable;
