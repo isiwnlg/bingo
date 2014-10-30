@@ -16,6 +16,7 @@ import javax.management.RuntimeErrorException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,17 +38,12 @@ public class CatObject implements CatConstants{
    public String[] constructorArgList = null;
    public final LinkedHashMap<String, Object> attributeMap = new LinkedHashMap<String, Object>();
    
-   ArrayList<String> lines ;
-   
+   public CatFile catFile;
    public CatObject parentObject = null;
    
    
    public final int[] startRowCol = {-1,-1};
    public final int[] endRowCol = {-1,-1};
-   
-   public String catFile = null;
-   public String catFileLines = null;
-   
    
    public static final HashMap<String, CatObject> register = new HashMap<String, CatObject>();
    public static final HashMap<String, CatObject> classCategoryRegister = new HashMap<String, CatObject>();
@@ -71,6 +67,7 @@ public class CatObject implements CatConstants{
       catFileList.add("C:/Users/lu/Desktop/temp/mpccom.cat");
       catFileList.add("C:/Users/lu/Desktop/temp/quamng.cat");
       catFileList.add("C:/Users/lu/Desktop/temp/safety.cat");
+      catFileList.add("C:/Users/lu/Desktop/temp/test.cat");
    }
    
    
@@ -80,6 +77,7 @@ public class CatObject implements CatConstants{
          File file = new File(filePath);
          ArrayList<String> lines = (ArrayList<String>) FileUtils.readLines(file, "UTF-8");
          logger.info("+++++++processing file: {}",file);
+         CatFile catFile = new CatFile(filePath, lines);
          for(int lineNo = 0; lineNo<lines.size(); ){
             logger.debug("--------{}",lineNo);
             String line = lines.get(lineNo);
@@ -89,7 +87,7 @@ public class CatObject implements CatConstants{
             }else if(CatObject.isObject(line)){
                int[] endPos = CatObject.getObjectEndPos(lines,lineNo);
                CatObject object = new CatObject(null);
-               lineNo = object.buildObject(lines, lineNo, endPos[0]);
+               lineNo = object.buildObject(catFile, lineNo, endPos[0]);
                
                if(object.objectType != null && object.objectType.compareTo(ObjectType.Class_Category) == 0){
                   classCategoryRegister.put(object.quid, object);
@@ -230,24 +228,24 @@ public class CatObject implements CatConstants{
    /**
     * 
     * @param paraName
-    * @param lines
+    * @param fileLines
     * @param lineNo
     * @return 返回处理完成的最后一行的行号
     */
-   public int setListAttr(String paraName, ArrayList<String> lines, int lineNo){
-      
+   public int setListAttr(String paraName, CatFile catFile, int lineNo){
+      ArrayList<String>  fileLines = catFile.getLines();
       CatObjectList catObjectList = new CatObjectList();
       
       attributeMap.put(paraName, catObjectList);
       int tempLineNo = lineNo;
-      String tempLine = lines.get(tempLineNo);// first line
+      String tempLine = fileLines.get(tempLineNo);// first line
       if(!isList(getAttrValue(tempLine))){
          throw new RuntimeException("Holy shit. This is not a list line. LineNo：" + lineNo);
       }
       
       catObjectList.setType(getListType(tempLine));
       
-      ArrayList<int[]> objIndexList = listObjCount(lines, lineNo);
+      ArrayList<int[]> objIndexList = listObjCount(fileLines, lineNo);
       int[] tempIndex = null;
       for (int i = 0; i < objIndexList.size(); i++) {
          tempIndex = objIndexList.get(i);
@@ -256,7 +254,7 @@ public class CatObject implements CatConstants{
             //no-OP
          }else{
             CatObject catObject = new CatObject(this);
-            catObject.buildObject(lines, tempIndex[0], tempIndex[1]);
+            catObject.buildObject(catFile, tempIndex[0], tempIndex[1]);
             catObjectList.add(catObject);
             register.put(catObject.quid, catObject);
          }
@@ -269,8 +267,8 @@ public class CatObject implements CatConstants{
          endLineNo = objIndexList.get(objIndexList.size()-1)[1];
       }
       
-      
-      
+      catObjectList.setStartPos(lineNo, -1);
+      catObjectList.setEndPos(endLineNo, -1);
       
       return endLineNo;
    }
@@ -340,15 +338,16 @@ public class CatObject implements CatConstants{
    /**
     * 构建对象，并返回下一行要处理的行号，注意是下一行
     * 当前行号
-    * @param lines
+    * @param fileLines
     * @param fromLineNo
     * @param toLineNo
     * @return
     */
-   public int  buildObject(ArrayList<String> lines, int fromLineNo, int toLineNo){
-      this.lines = lines;
+   public int  buildObject(CatFile catFile, int fromLineNo, int toLineNo){
+      this.catFile = catFile;
+      ArrayList<String>  fileLines = catFile.getLines();
       int currLineNo = fromLineNo;
-      String currLineTemp = lines.get(currLineNo);
+      String currLineTemp = fileLines.get(currLineNo);
       int startPos = currLineTemp.indexOf("(object");
       String currLine = currLineTemp.substring(startPos);
       if(!isObject(currLine)){
@@ -365,13 +364,13 @@ public class CatObject implements CatConstants{
       
       for (currLineNo++; currLineNo <= toLineNo; currLineNo++) {
          logger.debug("--------{}",currLineNo);
-         currLine = lines.get(currLineNo);
+         currLine = fileLines.get(currLineNo);
          if(StringUtils.isEmpty(currLine)){
             continue;
          }else if(isObject(currLine)){
             CatObject obj = new CatObject(this);
             logger.debug("build object {}'s subObject.",obj);
-            currLineNo = obj.buildObject(lines, currLineNo, lines.size()-1);
+            currLineNo = obj.buildObject(catFile, currLineNo, fileLines.size()-1);
          }else if(isAttr(currLine)){
             String attrName = getAttrName(currLine);
             String attrValue = getAttrValue(currLine);
@@ -387,13 +386,13 @@ public class CatObject implements CatConstants{
                }
             }else if(isList(attrValue)){
                //需要考虑什么时候结束对象的解析
-               currLineNo = setListAttr(attrName, lines, currLineNo);
+               currLineNo = setListAttr(attrName, catFile, currLineNo);
             }else if(isObject(attrValue)){
                //需要考虑什么时候结束对象的解析
-               int[] pos = getObjectEndPos(lines, currLineNo);
+               int[] pos = getObjectEndPos(fileLines, currLineNo);
                CatObject obj = new CatObject(this);
                setObjectAttr(attrName,obj);
-               int retValue = obj.buildObject(lines, currLineNo, pos[0]);
+               int retValue = obj.buildObject(catFile, currLineNo, pos[0]);
                currLineNo = pos[0];//不用buildObject返回的值作为当前行
             }else{
                int endIndex = attrValue.indexOf(CHAR_RIGHT_BRACKET);
@@ -600,7 +599,6 @@ public class CatObject implements CatConstants{
    
    
    public static CatClass getClass(String classQuid){
-      setMoidifyClassAttribute("533C992D01BA");
       CatClass clazz = new CatClass();
       CatObject catObject = CatObject.register.get(classQuid);
       if(catObject.is(ObjectType.Class)){
@@ -909,52 +907,26 @@ public class CatObject implements CatConstants{
    
    
    //update file
-   public static void setMoidifyClassAttribute(String quid){
-      
-      String attrQuid = quid;
-      CatObject catObject = CatObject.register.get(attrQuid);
-      ArrayList<String> lines = catObject.lines;
-      int[] startPos = null;
-      int[] endPos = null;
-      if(catObject.is(ObjectType.ClassAttribute)){
-         startPos = catObject.startRowCol;
-         endPos = catObject.endRowCol;
-         for (int i = startPos[0]; i <= endPos[0]; i++) {
-            System.out.println(lines.get(i));
-         }
-      }else{
-         throw new RuntimeException("ERROR:");
-      }
-   }
-   
-   /**
-    * 
-    * @return
-    */
-   public ArrayList<CatFileLine> convertLines(){
-      if(this.lines == null){
-         return null;
-      }
-      ArrayList<CatFileLine> retList = new ArrayList<CatFileLine>();
-      String tempLine = null;
-      for (Iterator iterator = this.lines.iterator(); iterator.hasNext();) {
-         tempLine = (String) iterator.next();
-         retList.add(new CatFileLine(tempLine));
-      }
-      return retList;
-   }
-   
-   
-   public void outputCatFile(ArrayList<CatFileLine> catFile){
-      for (Iterator iterator = catFile.iterator(); iterator.hasNext();) {
+   public static void outputCatFile(CatFile catFile){
+      ArrayList<CatFileLine> catFileLines = catFile.getFileLines();
+      for (Iterator iterator = catFileLines.iterator(); iterator.hasNext();) {
          CatFileLine catFileLine = (CatFileLine) iterator.next();
          if(catFileLine.isUnchanged()){
-            System.out.println(catFileLine.getLine());
+//            System.out.println(catFileLine.getLine());
+            logger.info(catFileLine.getLine());
          }else if(catFileLine.isModified()){
-            System.out.println(catFileLine.getNewLine());
+//            System.out.println(catFileLine.getNewLine());
+            logger.info(catFileLine.getNewLine());
          }else if(catFileLine.isObsoleted()){
             continue;
          }
+      }
+   }
+   public static void outputCatFile(CatFile catFile, File file){
+      try {
+         FileUtils.writeLines(file, catFile.getUpdatedLines());
+      } catch (IOException e) {
+         e.printStackTrace();
       }
    }
    
@@ -975,5 +947,24 @@ public class CatObject implements CatConstants{
          char tempChar = separator.charAt(0);
          return StringUtils.join(chars, tempChar);
       }
+   }
+   
+   public static String getPrefix(String str){
+      StringBuilder prefix = new StringBuilder();
+      if(StringUtils.isEmpty(str)){
+         return "";
+      }else{
+         char[] charArray = str.toCharArray();
+         char tempChar;
+         for (int i = 0; i < charArray.length; i++) {
+            tempChar = charArray[i];
+            if(tempChar == '\t' || tempChar == ' '){
+               prefix.append(tempChar);
+            }else{
+               break;
+            }
+         }
+      }
+      return prefix.toString();
    }
 }

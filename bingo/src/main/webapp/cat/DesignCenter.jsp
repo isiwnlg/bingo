@@ -33,6 +33,7 @@
   </head>
   <body>
   <form action="../bingo.cat" method="post">
+    <input type="hidden" name="class_quid" value="<%=quid %>">
     <div class="container">
     
     <p class="navbar-text navbar-right">欢迎您 <a href="#" class="navbar-link">路庆伟</a></p>
@@ -177,7 +178,7 @@
               <td><a href="#"><%=(i+1) %></a></td> 
               <td class="multirow-sys-td">
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
-                  <input type="hidden" name="quid" value="<%=classAttribute.getQuid()%>"> 
+                  <input type="hidden" name="attribute_quid" value="<%=classAttribute.getQuid()%>"> 
                   <label class="dropdown">
                     <span class="dropdown-toggle glyphicon glyphicon-tasks" id="dropdownMenu1" data-toggle="dropdown"></span>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -230,7 +231,7 @@
                    <%} %>
                 </td>
                 <td style="text-align:center">
-                <% if(classAttribute.isInsertable()){%>
+                   <% if(classAttribute.isInsertable()){%>
                    <input type="checkbox" name="<%=classAttribute.getQuid()%>_bingo_attr_insertable" value="Y" checked="checked"> 
                    <%}else{ %>
                    <input type="checkbox" name="<%=classAttribute.getQuid()%>_bingo_attr_insertable" value="Y"> 
@@ -306,6 +307,7 @@
             <tr>
               <td><a href="#"><%=(i+1) %></a></td> 
               <td class="multirow-sys-td">
+                  <input type="hidden" name="association_quid" value="<%=association.getQuid()%>"> 
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
                   <label class="dropdown">
                     <span class="dropdown-toggle glyphicon glyphicon-tasks" id="dropdownMenu1" data-toggle="dropdown"></span>
@@ -319,51 +321,46 @@
                   </label>
                   &nbsp;
                </td>
-                <td><%="Navigatable Association" %></td>
+                <td><%=association.getTypeDesc() %></td>
                 <td><%=association.getRoleA().getSupplier() %></td>
-                <td>
-                <% String tempRoleName = association.getRoleA().getName();
-                   if(tempRoleName == null || tempRoleName.startsWith("$UNNAMED$")){
-                      tempRoleName = "";
-                   }
-                %>
-                <%=tempRoleName %>
-                
-                </td>
+                <td><%=association.getRoleA().getDisplayName() %></td>
                 <td style="text-align:center">
                    <% if(association.isPrimaryKey()){%>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1" checked="checked"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_primary_key" value="Y" checked="checked"> 
                    <%}else{ %>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_primary_key" value="Y"> 
                    <%} %>
                 </td>
                 <td style="text-align:center">
                    <% if(association.isMandatory()){%>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1" checked="checked"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_mandatory" value="Y" checked="checked"> 
                    <%}else{ %>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_mandatory" value="Y"> 
                    <%} %>
                 </td>
                 <td style="text-align:center">
                 <% if(association.isInsertable()){%>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1" checked="checked"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_insertable" value="Y" checked="checked"> 
                    <%}else{ %>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_insertable" value="Y"> 
                    <%} %>
                 </td>
                 <td style="text-align:center">
                    <% if(association.isLov()){%>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1" checked="checked"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_lov" value="Y" checked="checked"> 
                    <%}else{ %>
-                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 
+                   <input type="checkbox" name="<%=association.getQuid()%>_bingo_asso_lov" value="Y"> 
                    <%} %>
                 </td>                
                 <td>
-                      <select id="disabledSelect" class="">
-                        <option value="initializing">Update Not Allowed</option>
-                        <option value="approving">Update Allowed</option>
-                        <option value="completed">Update Allowed If Null</option>
-                      </select>
+                   <select name="<%=association.getQuid()%>_bingo_asso_updatable" class="">
+                      <%
+                      FieldUpdatable[] fieldUpdatables  = FieldUpdatable.values();
+                      for(int k = 0; k< fieldUpdatables.length; k++){
+                      %>
+                       <option value="<%=fieldUpdatables[k].name() %>" <%=association.getUpdatable().compareTo(fieldUpdatables[k])==0 ? "selected=\"selected\"" : "" %>><%=fieldUpdatables[k].name() %></option>  
+                      <%} %>  
+                   </select>
                 </td>
             </tr>
             
