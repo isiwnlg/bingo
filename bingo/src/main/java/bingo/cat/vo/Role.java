@@ -1,15 +1,29 @@
 package bingo.cat.vo;
 
-import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
 
 import bingo.cat.CatObject;
 import bingo.cat.ObjectType;
 
 public class Role extends CatVoObject {
+   private String label;//=Name ?
+   private String Containment;
    private String supplier;
    private String quidu;
    private boolean navigatable;
    private boolean aggregate;
+   public String getLabel() {
+      return label;
+   }
+   public void setLabel(String label) {
+      this.label = label;
+   }
+   public String getContainment() {
+      return Containment;
+   }
+   public void setContainment(String containment) {
+      Containment = containment;
+   }
    public String getSupplier() {
       return supplier;
    }
@@ -41,10 +55,20 @@ public class Role extends CatVoObject {
       }
       this.setQuid(catObject.quid);
       this.setName(catObject.getName());
-      
+      this.setLabel(catObject.getStrAttr("label"));
+      this.setContainment(catObject.getStrAttr("Containment"));
       this.setSupplier(catObject.getStrAttr("supplier"));
       this.setQuidu(catObject.getStrAttr("quidu"));
       this.setNavigatable(catObject.getBoolAttr("is_navigable"));
       this.setAggregate(catObject.getBoolAttr("is_aggregate"));
+   }
+   
+   //convenient method
+   public String getDisplayName(){
+      if(StringUtils.isEmpty(label)){
+         return "";
+      }else{
+         return label;
+      }
    }
 }

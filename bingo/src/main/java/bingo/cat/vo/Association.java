@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import bingo.cat.CatObject;
+import bingo.cat.FieldUpdatable;
 import bingo.cat.ObjectType;
 
 public class Association extends CatVoObject {
@@ -11,7 +12,7 @@ public class Association extends CatVoObject {
    private boolean mandatory = false;
    private boolean insertable = true;
    private boolean lov = false;
-   private boolean updatable = true;
+   private FieldUpdatable updatable = FieldUpdatable.ALLOWED;
    private Role roleA;
    private Role roleB;
    public boolean isPrimaryKey() {
@@ -38,10 +39,11 @@ public class Association extends CatVoObject {
    public void setLov(boolean lov) {
       this.lov = lov;
    }
-   public boolean isUpdatable() {
+   
+   public FieldUpdatable getUpdatable() {
       return updatable;
    }
-   public void setUpdatable(boolean updatable) {
+   public void setUpdatable(FieldUpdatable updatable) {
       this.updatable = updatable;
    }
    public Role getRoleA() {
@@ -70,7 +72,7 @@ public class Association extends CatVoObject {
       boolean mandatory = false;
       boolean insertable = true;
       boolean lov = true;
-      boolean updatable = true;
+      FieldUpdatable updatable = FieldUpdatable.ALLOWED;
       
       ArrayList<CatObject> attributesList = catObject.getListAttr("attributes");
       if(null != attributesList){
@@ -90,7 +92,15 @@ public class Association extends CatVoObject {
                      mandatory = tempValue.charAt(1) == 'M';
                      insertable = tempValue.charAt(2) == 'I';
                      lov = tempValue.charAt(4) == 'L';
-                     updatable = tempValue.charAt(3) == 'U';
+                     if(tempValue.charAt(3) == 'U'){
+                        updatable = FieldUpdatable.ALLOWED;
+                     }else if(tempValue.charAt(3) == 'C'){
+                        updatable = FieldUpdatable.ALLOWEDIFNULL; 
+                     }else if(tempValue.charAt(3) == '-'){
+                        updatable = FieldUpdatable.NOTALLOWED;
+                     }else{
+                        throw new RuntimeException("ERROR: Unknown update flag!");
+                     }
                   }
                }
                
@@ -115,5 +125,14 @@ public class Association extends CatVoObject {
          throw new RuntimeException("should not happen!");
       }
             
+   }
+   
+   //convenient method
+   public String getTypeDesc(){
+      if(roleB.isAggregate() && roleA.getContainment() != null && roleA.getContainment().equals("By Value")){
+         return "Aggregate By Value";
+      }else{
+         return "Navigable Association";
+      }
    }
 }

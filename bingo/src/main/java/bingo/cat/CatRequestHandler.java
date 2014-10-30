@@ -49,30 +49,19 @@ public class CatRequestHandler extends HttpServlet {
       }
 	}
 
-	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	   Map<String, String[]> parameterMap = request.getParameterMap();
-	   String classQuid = request.getParameter("class_quid");
-      CatObject classObj = CatObject.register.get(classQuid);
-	   CatFile catFile = classObj.catFile;
-	   ArrayList<CatFileLine> fileLines = catFile.getFileLines();
-	   
-	   
-	   
-	   String[] quid = request.getParameterValues("quid");
-	   
-	   String attrQuid = null;
-	   String paraValue = null;
-	   char[] flag = null;
-	   
+	
+	private void updateAttribute(CatFile catFile, HttpServletRequest request){
+      String[] attrQuids = request.getParameterValues("attribute_quid");
+      String attrQuid = null;
+      String paraValue = null;
+      char[] flag = null;
+      
       FieldType fieldType = FieldType.STRING; 
       Integer length = 0; 
       FieldFormat fieldFormat = FieldFormat.UNFORMATTED;
-	   StringBuilder dataType = new StringBuilder();
-	   
-	   boolean primaryKey = true;
+      StringBuilder dataType = new StringBuilder();
+      
+      boolean primaryKey = true;
       boolean mandatory = true;
       boolean insertable = true;
       boolean lov = true;
@@ -81,10 +70,10 @@ public class CatRequestHandler extends HttpServlet {
       ArrayList<CalAttr> attrList = null;
       CatObject attrObj = null;
       CatObjectList catObjectList  = null;
-	   for (int i = 0; i < quid.length; i++) {
-	      attrList = new ArrayList<CalAttr>();
-	      flag = new char[5];
-         attrQuid = quid[i];  
+      for (int i = 0; i < attrQuids.length; i++) {
+         attrList = new ArrayList<CalAttr>();
+         flag = new char[5];
+         attrQuid = attrQuids[i];  
          
          //FieldFlag
          paraValue = request.getParameter(attrQuid + "_bingo_attr_primary_key");
@@ -130,7 +119,6 @@ public class CatRequestHandler extends HttpServlet {
             flag[3] = '-';
          }
          String flagStr = CatObject.join(flag, "");
-//         System.out.println(""+flagStr);
          attrList.add(new CalAttr("FieldFlags", flagStr));
          
          //FieldFormat
@@ -201,7 +189,6 @@ public class CatRequestHandler extends HttpServlet {
             CatFileLine tempLine = catFile.getFileLine(startLineNo);
            
             sb.append(tempLine.getLine()).append(CatConstants.NEW_LINE);//TODO list 为空的情况没有考虑
-//            sb.append(prefix).append(CatConstants.FOUR_SPACE).append("attributes   (list Attribute_Set").append(CatConstants.NEW_LINE);
             for (Iterator<CalAttr> iterator = attrList.iterator(); iterator.hasNext();) {
                CalAttr calAttr = iterator.next();
                sb.append(calAttr.toCatObjectStr(prefix + CatConstants.CHAR_T));
@@ -214,6 +201,135 @@ public class CatRequestHandler extends HttpServlet {
             tempLine.update(sb.toString());
          }
       }
+	}
+	private void updateAssociation(CatFile catFile, HttpServletRequest request){
+	   String[] associationQuids = request.getParameterValues("association_quid");
+	   String assoQuid = null;
+	   String paraValue = null;
+	   char[] flag = null;
+	   
+	   FieldType fieldType = FieldType.STRING; 
+	   Integer length = 0; 
+	   FieldFormat fieldFormat = FieldFormat.UNFORMATTED;
+	   StringBuilder dataType = new StringBuilder();
+	   
+	   boolean primaryKey = true;
+	   boolean mandatory = true;
+	   boolean insertable = true;
+	   boolean lov = true;
+	   FieldUpdatable updatable = FieldUpdatable.NOTALLOWED;
+	   
+	   ArrayList<CalAttr> attrList = null;
+	   CatObject assoObject = null;
+	   CatObjectList catObjectList  = null;
+	   for (int i = 0; i < associationQuids.length; i++) {
+	      attrList = new ArrayList<CalAttr>();
+	      flag = new char[5];
+	      assoQuid = associationQuids[i];  
+	      
+	      //FieldFlag
+	      paraValue = request.getParameter(assoQuid + "_bingo_asso_primary_key");
+	      if(paraValue == null){
+	         flag[0] = 'A';
+	      }else{
+	         flag[0] = 'K';
+	      }
+	      
+	      //
+	      paraValue = request.getParameter(assoQuid + "_bingo_asso_mandatory");
+	      if(paraValue == null){
+	         flag[1] = '-';
+	      }else{
+	         flag[1] = 'M';
+	      }
+	      
+	      //
+	      paraValue = request.getParameter(assoQuid + "_bingo_asso_insertable");
+	      if(paraValue == null){
+	         flag[2] = '-';
+	      }else{
+	         flag[2] = 'I';
+	      }
+	      
+	      //
+	      paraValue = request.getParameter(assoQuid + "_bingo_asso_lov");
+	      if(paraValue == null){
+	         flag[4] = '-';
+	      }else{
+	         flag[4] = 'L';
+	      }
+	      
+	      //
+	      paraValue = request.getParameter(assoQuid + "_bingo_asso_updatable");
+	      
+	      updatable = FieldUpdatable.valueOf(paraValue);
+	      if(updatable.compareTo(FieldUpdatable.ALLOWED) == 0){
+	         flag[3] = 'U';
+	      }else if(updatable.compareTo(FieldUpdatable.ALLOWEDIFNULL) == 0){
+	         flag[3] = 'C';
+	      }else if(updatable.compareTo(FieldUpdatable.NOTALLOWED) == 0){
+	         flag[3] = '-';
+	      }
+	      String flagStr = CatObject.join(flag, "");
+	      attrList.add(new CalAttr("FieldFlags", flagStr));
+	      
+	    
+	      assoObject = CatObject.register.get(assoQuid);
+	      catObjectList = assoObject.getCatObjectList("attributes");
+	      StringBuilder sb = new StringBuilder();
+	      if(null == catObjectList) {
+	         int objStartLineNo = assoObject.startRowCol[0];
+	         CatFileLine objLine = catFile.getFileLine(objStartLineNo);
+	         sb.append(objLine.getLine()).append(CatConstants.NEW_LINE);
+	         String prefix = CatObject.getPrefix(objLine.getLine());//tabs ....
+	         sb.append(prefix).append(CatConstants.FOUR_SPACE).append("attributes   (list Attribute_Set").append(CatConstants.NEW_LINE);
+	         for (Iterator<CalAttr> iterator = attrList.iterator(); iterator.hasNext();) {
+	            CalAttr calAttr = (CalAttr) iterator.next();
+	            sb.append(calAttr.toCatObjectStr(prefix + CatConstants.CHAR_T));
+	            if(iterator.hasNext()){
+	               sb.append(CatConstants.NEW_LINE);
+	            }else{
+	               sb.append(")");
+	            }
+	         }
+	         objLine.update(sb.toString());
+	      }else{//catObjectList.size() >= 0
+	         int objStartLineNo = assoObject.startRowCol[0];
+	         CatFileLine objLine = catFile.getFileLine(objStartLineNo);
+	         String prefix = CatObject.getPrefix(objLine.getLine());
+	         
+	         int startLineNo = catObjectList.getStartLineNo();
+	         int endLineNo = catObjectList.getEndLineNo();
+	         catFile.deleteLines(startLineNo, endLineNo);
+	         CatFileLine tempLine = catFile.getFileLine(startLineNo);
+	         
+	         sb.append(tempLine.getLine()).append(CatConstants.NEW_LINE);//TODO list 为空的情况没有考虑
+	         for (Iterator<CalAttr> iterator = attrList.iterator(); iterator.hasNext();) {
+	            CalAttr calAttr = iterator.next();
+	            sb.append(calAttr.toCatObjectStr(prefix + CatConstants.CHAR_T));
+	            if(iterator.hasNext()){
+	               sb.append(CatConstants.NEW_LINE);
+	            }else{
+	               sb.append(")");
+	            }
+	         }
+	         tempLine.update(sb.toString());
+	      }
+	   }
+	}
+	
+	/**
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	   Map<String, String[]> parameterMap = request.getParameterMap();
+	   String classQuid = request.getParameter("class_quid");
+      CatObject classObj = CatObject.register.get(classQuid);
+	   CatFile catFile = classObj.catFile;
+	   
+	   updateAttribute(catFile, request);
+	   updateAssociation(catFile, request);
+	   
 	   CatObject.outputCatFile(catFile, new File("C:\\Users\\lu\\tempCatFile.cat"));
 	}
 
