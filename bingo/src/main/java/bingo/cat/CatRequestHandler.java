@@ -204,6 +204,11 @@ public class CatRequestHandler extends HttpServlet {
 	}
 	private void updateAssociation(CatFile catFile, HttpServletRequest request){
 	   String[] associationQuids = request.getParameterValues("association_quid");
+	   if(associationQuids == null || associationQuids.length == 0){
+	      return;
+	   }
+	   
+	   
 	   String assoQuid = null;
 	   String paraValue = null;
 	   char[] flag = null;
@@ -316,7 +321,7 @@ public class CatRequestHandler extends HttpServlet {
 	         tempLine.update(sb.toString());
 	      }
 	   }
-	}
+	} 
 	
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
@@ -330,7 +335,11 @@ public class CatRequestHandler extends HttpServlet {
 	   updateAttribute(catFile, request);
 	   updateAssociation(catFile, request);
 	   
-	   CatObject.outputCatFile(catFile, new File("C:\\Users\\lu\\tempCatFile.cat"));
+	   CatObject.outputCatFile(catFile);
+	   
+	   CatObject.loadCatFile(catFile.getFilePath());
+	   response.sendRedirect("./cat/DesignCenter.jsp?quid="+classQuid);
+	   
 	}
 
 }

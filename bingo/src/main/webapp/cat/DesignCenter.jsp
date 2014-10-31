@@ -60,7 +60,7 @@
             </button>
             
 	         <div class="btn-group btn-group-sm">
-	            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: rgb(135,156,170)">
+	            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: #67C518">
 	              <span class="glyphicon glyphicon-tasks"></span>操作
 	            </button>
 	            <ul class="dropdown-menu">

@@ -71,34 +71,37 @@ public class CatObject implements CatConstants{
    }
    
    
+   public static void loadCatFile(String filePath) throws IOException{
+      File file = new File(filePath);
+      ArrayList<String> lines = (ArrayList<String>) FileUtils.readLines(file, "UTF-8");
+      logger.info("+++++++processing file: {}",file);
+      CatFile catFile = new CatFile(filePath, lines);
+      for(int lineNo = 0; lineNo<lines.size(); ){
+         logger.debug("--------{}",lineNo);
+         String line = lines.get(lineNo);
+         if(StringUtils.isEmpty(line)){
+            lineNo++;
+            continue;
+         }else if(CatObject.isObject(line)){
+            int[] endPos = CatObject.getObjectEndPos(lines,lineNo);
+            CatObject object = new CatObject(null);
+            lineNo = object.buildObject(catFile, lineNo, endPos[0]);
+            
+            if(object.objectType != null && object.objectType.compareTo(ObjectType.Class_Category) == 0){
+               classCategoryRegister.put(object.quid, object);
+            }
+            
+            logger.info("+++++++object {} is created.",object);
+         }else{
+            lineNo++;
+            logger.error("ERROR: LineNo {}: I DO NOT KNOW WHAT TO DO NOW!", lineNo);
+         }
+      }
+   }
+   
    public static void init() throws IOException{
       for (Iterator<String> iterator = catFileList.iterator(); iterator.hasNext();) {
-         String filePath = iterator.next();
-         File file = new File(filePath);
-         ArrayList<String> lines = (ArrayList<String>) FileUtils.readLines(file, "UTF-8");
-         logger.info("+++++++processing file: {}",file);
-         CatFile catFile = new CatFile(filePath, lines);
-         for(int lineNo = 0; lineNo<lines.size(); ){
-            logger.debug("--------{}",lineNo);
-            String line = lines.get(lineNo);
-            if(StringUtils.isEmpty(line)){
-               lineNo++;
-               continue;
-            }else if(CatObject.isObject(line)){
-               int[] endPos = CatObject.getObjectEndPos(lines,lineNo);
-               CatObject object = new CatObject(null);
-               lineNo = object.buildObject(catFile, lineNo, endPos[0]);
-               
-               if(object.objectType != null && object.objectType.compareTo(ObjectType.Class_Category) == 0){
-                  classCategoryRegister.put(object.quid, object);
-               }
-               
-               logger.info("+++++++object {} is created.",object);
-            }else{
-               lineNo++;
-               logger.error("ERROR: LineNo {}: I DO NOT KNOW WHAT TO DO NOW!", lineNo);
-            }
-         }
+         loadCatFile(iterator.next());
       }
    }
    
@@ -908,19 +911,10 @@ public class CatObject implements CatConstants{
    
    //update file
    public static void outputCatFile(CatFile catFile){
-      ArrayList<CatFileLine> catFileLines = catFile.getFileLines();
-      for (Iterator iterator = catFileLines.iterator(); iterator.hasNext();) {
-         CatFileLine catFileLine = (CatFileLine) iterator.next();
-         if(catFileLine.isUnchanged()){
-//            System.out.println(catFileLine.getLine());
-            logger.info(catFileLine.getLine());
-         }else if(catFileLine.isModified()){
-//            System.out.println(catFileLine.getNewLine());
-            logger.info(catFileLine.getNewLine());
-         }else if(catFileLine.isObsoleted()){
-            continue;
-         }
-      }
+      outputCatFile(catFile, catFile.getFilePath());
+   }
+   public static void outputCatFile(CatFile catFile, String file){
+      outputCatFile(catFile, new File(file));
    }
    public static void outputCatFile(CatFile catFile, File file){
       try {
