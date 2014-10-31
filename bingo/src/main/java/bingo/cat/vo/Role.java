@@ -7,7 +7,11 @@ import bingo.cat.ObjectType;
 
 public class Role extends CatVoObject {
    private String label;//=Name ?  程序员A修改
+<<<<<<< HEAD
    private String Containment;//程序员B修改
+=======
+   private String Containment;
+>>>>>>> branch 'master' of https://github.com/isiwnlg/bingo.git
    private String supplier;
    private String quidu;
    private boolean navigatable;
