@@ -59,7 +59,7 @@
               <span class="glyphicon glyphicon-minus-sign"></span>取消
             </button>
             
-	         <div class="btn-group btn-group-sm">
+	         <div class="btn-group btn-group-sm pull-right">
 	            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: #67C518">
 	              <span class="glyphicon glyphicon-tasks"></span>操作
 	            </button>
