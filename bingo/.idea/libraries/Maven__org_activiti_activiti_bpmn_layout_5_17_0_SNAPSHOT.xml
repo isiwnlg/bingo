@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.activiti:activiti-bpmn-layout:5.17.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-bpmn-layout/5.17.0-SNAPSHOT/activiti-bpmn-layout-5.17.0-20141031.075701-4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-bpmn-layout/5.17.0-SNAPSHOT/activiti-bpmn-layout-5.17.0-20141031.075701-4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-bpmn-layout/5.17.0-SNAPSHOT/activiti-bpmn-layout-5.17.0-20141031.075701-4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

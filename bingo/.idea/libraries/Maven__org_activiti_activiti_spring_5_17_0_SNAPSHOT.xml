@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.activiti:activiti-spring:5.17.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-spring/5.17.0-SNAPSHOT/activiti-spring-5.17.0-20141031.075943-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-spring/5.17.0-SNAPSHOT/activiti-spring-5.17.0-20141031.075943-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-spring/5.17.0-SNAPSHOT/activiti-spring-5.17.0-20141031.075943-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

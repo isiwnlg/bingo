@@ -4,6 +4,7 @@
     <entry_points version="2.0" />
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$USER_HOME$/Activiti/modules/activiti-webapp-explorer2" />
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
   <component name="JsBowerSettings">
@@ -14,6 +15,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$USER_HOME$/Activiti/modules/activiti-webapp-explorer2/pom.xml" />
       </list>
     </option>
   </component>

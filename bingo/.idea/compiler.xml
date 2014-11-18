@@ -22,9 +22,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="activiti-webapp-explorer2" />
         <module name="bingo" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="activiti-webapp-explorer2" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/Activiti/modules/activiti-webapp-explorer2/activiti-webapp-explorer2.iml" filepath="$USER_HOME$/Activiti/modules/activiti-webapp-explorer2/activiti-webapp-explorer2.iml" />
       <module fileurl="file://$PROJECT_DIR$/bingo.iml" filepath="$PROJECT_DIR$/bingo.iml" />
     </modules>
   </component>

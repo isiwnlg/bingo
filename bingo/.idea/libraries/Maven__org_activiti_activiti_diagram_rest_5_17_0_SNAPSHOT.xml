@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.activiti:activiti-diagram-rest:5.17.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-diagram-rest/5.17.0-SNAPSHOT/activiti-diagram-rest-5.17.0-20141031.075931-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-diagram-rest/5.17.0-SNAPSHOT/activiti-diagram-rest-5.17.0-20141031.075931-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/activiti/activiti-diagram-rest/5.17.0-SNAPSHOT/activiti-diagram-rest-5.17.0-20141031.075931-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
