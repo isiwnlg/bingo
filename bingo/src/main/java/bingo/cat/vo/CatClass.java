@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import bingo.cat.ObjidType;
 import bingo.cat.ObjversionType;
 
+/**
+ * @author lulu
+ *
+ */
 public class CatClass extends bingo.cat.vo.CatVoObject {
 
    private String packageName;

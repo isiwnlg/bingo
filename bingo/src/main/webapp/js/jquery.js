@@ -3316,6 +3316,8 @@ jQuery.extend({
 		return deferred.promise();
 	}
 });
+
+
 jQuery.support = (function( support ) {
 
 	var all, a, input, select, fragment, opt, eventName, isSupported, i,
@@ -6479,6 +6481,7 @@ function fixDefaultChecked( elem ) {
 }
 
 jQuery.extend({
+    lqwf: function(){alert('lqwxxxxx');},
 	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
 		var destElements, node, clone, i, srcElements,
 			inPage = jQuery.contains( elem.ownerDocument, elem );

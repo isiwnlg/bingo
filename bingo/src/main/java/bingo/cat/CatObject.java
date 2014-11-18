@@ -3,14 +3,8 @@ package bingo.cat;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
 
 import javax.management.RuntimeErrorException;
 
@@ -52,22 +46,41 @@ public class CatObject implements CatConstants{
    public static final ArrayList<String> catFileList = new ArrayList<String>();
    
    static{
-      catFileList.add("C:/Users/lu/Desktop/temp/appsrv.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/chgmng.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/constr.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/docctl.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/docman.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/doctrs.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/enterp.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/Fndbas.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/genbas.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/genmng.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/appsrv.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/chgmng.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/constr.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/docctl.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/docman.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/doctrs.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/enterp.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/Fndbas.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/genbas.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/genmng.cat");
+////      catFileList.add("C:/Users/lu/Desktop/temp/goldgrig.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/hzwflo.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/mpccom.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/quamng.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/safety.cat");
+//      catFileList.add("C:/Users/lu/Desktop/temp/test.cat");
+
+      catFileList.add("/Users/lulu/Documents/交换站/temp/appsrv.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/chgmng.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/constr.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/docctl.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/docman.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/doctrs.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/enterp.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/Fndbas.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/genbas.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/genmng.cat");
 //      catFileList.add("C:/Users/lu/Desktop/temp/goldgrig.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/hzwflo.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/mpccom.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/quamng.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/safety.cat");
-      catFileList.add("C:/Users/lu/Desktop/temp/test.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/hzwflo.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/mpccom.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/quamng.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/safety.cat");
+      catFileList.add("/Users/lulu/Documents/交换站/temp/test.cat");
+
+
    }
    
    
@@ -231,7 +244,7 @@ public class CatObject implements CatConstants{
    /**
     * 
     * @param paraName
-    * @param fileLines
+    * @param catFile
     * @param lineNo
     * @return 返回处理完成的最后一行的行号
     */
@@ -341,7 +354,7 @@ public class CatObject implements CatConstants{
    /**
     * 构建对象，并返回下一行要处理的行号，注意是下一行
     * 当前行号
-    * @param fileLines
+    * @param catFile
     * @param fromLineNo
     * @param toLineNo
     * @return
@@ -960,5 +973,22 @@ public class CatObject implements CatConstants{
          }
       }
       return prefix.toString();
+   }
+   
+   
+   public void temp(){
+      Map<FieldType, List<FieldFormat>> typeFormatMap = CatConstants.typeFormatMap;
+
+      Set<Entry<FieldType, List<FieldFormat>>> tempEntryset =  typeFormatMap.entrySet();
+      for(Iterator<Entry<FieldType, List<FieldFormat>>> iterator = tempEntryset.iterator() ; iterator.hasNext();){
+         Entry<FieldType, List<FieldFormat>> entry = iterator.next();
+         System.out.print(entry.getKey());
+         List<FieldFormat> formatList = entry.getValue();
+         for(Iterator<FieldFormat> iterator2 = formatList.iterator(); iterator2.hasNext(); ){
+            FieldFormat tempFieldFormat = iterator2.next();
+
+         }
+      }
+
    }
 }

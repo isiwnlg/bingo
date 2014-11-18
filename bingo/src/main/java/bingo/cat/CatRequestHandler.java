@@ -131,7 +131,7 @@ public class CatRequestHandler extends HttpServlet {
             }
          }
          
-         paraValue = request.getParameter(attrQuid + "_bing_attr_format");
+         paraValue = request.getParameter(attrQuid + "_bingo_attr_format");
          fieldFormat = FieldFormat.valueOf(paraValue);
          
          dataType = new StringBuilder();
