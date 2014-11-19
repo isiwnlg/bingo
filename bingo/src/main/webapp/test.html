@@ -8,8 +8,19 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/github.min.css">
     <link rel="stylesheet" href="./css/docs.css">
+      <style type="text/css">
+          .square-40 {
+              width: 40px;
+              height: 40px;
+          }
+          .square-60 {
+              width: 60px;
+              height: 60px;
+          }
+      </style>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+      <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
@@ -17,6 +28,26 @@
     <![endif]-->
   </head>
   <body>
+
+
+  <div class="container" style="background-color: yellowgreen; width: 100%; height: 100%">
+
+      <div class="square-40" style="background-color: indigo; float: left;" onclick="alert('square-40')">
+
+
+      </div>
+
+      <div class="square-40" style="background-color: lightsalmon; float: right;" onclick="alert('square-40-2')">
+
+
+      </div>
+
+      <div class="square-60" style="background-color: #ffff00; position: relative;margin-left: 20px;margin-top: 20px;"onclick="alert('square-60')">
+
+
+      </div>
+
+  </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="./js/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -30,10 +61,10 @@
       
       b=10;
     //  alert(b);//10
-     alert(delete b);//true
-      alert(window.b);//undefined;
+     //alert(delete b);//true
+     // alert(window.b);//undefined;
 
-      $.lqwf();
+      //$.lqwf();
       
     </script>
     

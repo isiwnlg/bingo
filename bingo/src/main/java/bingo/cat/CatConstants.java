@@ -46,6 +46,11 @@ public interface CatConstants {
          tempFormatList.add(FieldFormat.PERCENTAGE);
          tempFormatList.add(FieldFormat.INVISIBLE);
          put(FieldType.NUMBER, tempFormatList);
+
+         tempFormatList = new ArrayList<FieldFormat>();
+         tempFormatList.add(FieldFormat.UNFORMATTED);
+         tempFormatList.add(FieldFormat.INVISIBLE);
+         put(FieldType.BOOLEAN, tempFormatList);
       }
    };
 

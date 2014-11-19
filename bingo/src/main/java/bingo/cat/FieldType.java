@@ -1,5 +1,5 @@
 package bingo.cat;
 
 public enum FieldType {
-    STRING,NUMBER,DATE
+    STRING,NUMBER,DATE,BOOLEAN
 }

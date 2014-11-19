@@ -227,7 +227,7 @@
                 <td>
 
                     <%
-                    if(classAttribute.getFieldType().compareTo(FieldType.DATE)==0){
+                    if(classAttribute.getFieldType().compareTo(FieldType.DATE)==0 || classAttribute.getFieldType().compareTo(FieldType.BOOLEAN)==0){
                     %>
                     <input name="<%=classAttribute.getQuid()%>_bingo_attr_length" class="text readonly" value="" size="6" type="text" style="text-align:right" readonly="readonly">
                     <%
@@ -428,7 +428,7 @@
 //        });
         $('select[name='+ field_type +'_field_format_select] option').clone().appendTo(field_format);
 
-        if(field_type == 'DATE'){
+        if(field_type == 'DATE'||field_type == 'BOOLEAN'){
             $('input[name='+quid+'_bingo_attr_length]').val('');
             $('input[name='+quid+'_bingo_attr_length]').addClass('readonly').attr('readonly','readonly');
         }else{
