@@ -17,18 +17,16 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile default="false" name="Annotation profile for bingo" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="activiti-webapp-explorer2" />
         <module name="bingo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="activiti-webapp-explorer2" target="1.6" />
+      <module name="bingo" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>
-

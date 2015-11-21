@@ -149,15 +149,15 @@
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade active in" id="attribute">
-            <div class="commandbar">
-        <div class="btn-group btn-group-sm">
-              <button type="button" class="btn btn-default" style="color: rgb(176,176,176)">
-                <span class="glyphicon glyphicon-cog"></span>
-              </button>
-        </div>
-        <div class="btn-toolbar pull-right" role="toolbar" style="margin: 0;">
-        </div>
-      </div><!-- toolbar-group end -->
+        <div class="commandbar">
+            <div class="btn-group btn-group-sm">
+                  <button type="button" class="btn btn-default" style="color: rgb(176,176,176)">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </button>
+            </div>
+            <div class="btn-toolbar pull-right" role="toolbar" style="margin: 0;">
+            </div>
+        </div><!-- toolbar-group end -->
         <table class="multirow-table hovered">
           <thead>
             <tr>

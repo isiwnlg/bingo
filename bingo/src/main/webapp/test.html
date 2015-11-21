@@ -58,14 +58,123 @@
     
     <script>
 
-      
-      b=10;
-    //  alert(b);//10
-     //alert(delete b);//true
-     // alert(window.b);//undefined;
 
-      //$.lqwf();
-      
+
+        var Clazz = function() {
+            this.version = "Clazz 1.0";//
+            if(arguments){
+                console.log(arguments);
+            }
+        };
+
+        /**
+         * Empty constructor.
+         * @methodOf Clazz.prototype
+         */
+        Clazz.prototype.construct = function() {};
+
+        /**
+         * Can be used to build up inheritances of classes.
+         * @example
+         * var MyClass = Clazz.extend({
+         *   construct: function(myParam){
+         *     // Do sth.
+         *   }
+         * });
+         * var MySubClass = MyClass.extend({
+         *   construct: function(myParam){
+         *     // Use this to call constructor of super class
+         *     arguments.callee.$.construct.apply(this, arguments);
+         *     // Do sth.
+         *   }
+         * });
+         * @param {Object} def The definition of the new class.
+         */
+        Clazz.extend = function(def) {
+            var classDef = function() {
+                this.classDefVersion = 'classDef 1.0';
+                if (arguments[0] !== Clazz) {
+//                    this.construct.apply(this, arguments);
+                    this.construct(arguments);
+                }
+            };
+
+            var proto = new this(Clazz);//返回
+            console.log(proto.version);
+            var superClass = this.prototype;
+
+            for (var n in def) {
+                var item = def[n];
+                if (item instanceof Function) item.$ = superClass;
+                proto[n] = item;
+            }
+
+            classDef.prototype = proto;
+
+            //Give this new class the same static extend method
+            classDef.extend = this.extend;
+            return classDef;
+        };
+
+        var Lqw = {};
+
+        Lqw.Lov={
+            construct:function(){
+                arguments.callee.$.construct.apply(this, arguments);
+                this.version = '1.0';
+            },
+            getVersion:function(){
+                return this.version;
+            }
+
+        };
+
+
+        Lqw.Lov = Clazz.extend(Lqw.Lov);
+
+        var lov = new Lqw.Lov();
+        lov.getVersion();
+
+        Lqw.MultiLov = {
+            construct:function(){
+                arguments.callee.$.construct.apply(this, arguments);
+                this.enableMultiSelect = true;
+                this.version = "1.1";
+            }
+        }
+
+        Lqw.MultiLov = Lqw.Lov.extend(Lqw.MultiLov);
+        var multiLov = new Lqw.MultiLov();
+//        alert(multiLov.getVersion());
+
+        Lqw.MultiColorLov = {
+            construct:function(){
+                arguments.callee.$.construct.apply(this, arguments);
+                this.version = 'MultiColorLov 1.2';
+            }
+        }
+
+        Lqw.MultiColorLov = Lqw.MultiLov.extend(Lqw.MultiColorLov);
+        var multiColorLov = new Lqw.MultiColorLov(Clazz);
+        console.log('mulitColorLov:' + multiColorLov);
+//        alert(multiColorLov.getVersion());
+
+//        Clazz();
+
+        var a = '';
+        var b = 1;
+        var c = true;
+        var d = {};
+        var e = function(){
+            console.log('e is created!')
+        }
+        var f = new e();
+
+        var g = [11,1,1,111,1];
+
+
+        console.log('Lqw.MultiColorLov.version:' + Lqw.MultiColorLov.version);//Clazz 1.0
+
     </script>
     
   </body>
